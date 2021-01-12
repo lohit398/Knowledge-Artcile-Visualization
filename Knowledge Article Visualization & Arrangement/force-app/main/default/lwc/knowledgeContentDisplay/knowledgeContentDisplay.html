@@ -1,0 +1,29 @@
+<template>
+    <template if:true={selectedKnowledgeArticleId}>
+        <div class="container">
+            <div class="title">
+                {articleTitle}
+            </div>
+            <div class="slds-box demo-only demo-only--sizing slds-grid slds-wrap" style="margin-top:10px;">
+                <div class="slds-size_1-of-4">
+                    <div class="slds-box_x-small slds-text-align_center slds-m-around_x-small">{articleNumber}</div>
+                </div>
+                <div class="slds-size_1-of-4">
+                    <div class="slds-box_x-small slds-text-align_center slds-m-around_x-small">{recordType}</div>
+                </div>
+                <div class="slds-size_1-of-4">
+                    <div class="slds-box_x-small slds-text-align_center slds-m-around_x-small">{language}</div>
+                </div>
+                <div class="slds-size_1-of-4">
+                    <div class="slds-box_x-small slds-text-align_center slds-m-around_x-small">{versionNumber}</div>
+                </div>
+            </div>
+            <div class="body">
+                <lightning-formatted-rich-text value={articleDetail}></lightning-formatted-rich-text>
+            </div>
+        </div>
+    </template>
+    <template if:false={selectedKnowledgeArticleId}>
+        <c-k-a-customillustration></c-k-a-customillustration>
+    </template>
+</template>

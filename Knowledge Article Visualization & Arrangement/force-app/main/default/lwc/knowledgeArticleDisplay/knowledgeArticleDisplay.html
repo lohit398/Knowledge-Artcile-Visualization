@@ -1,0 +1,44 @@
+<template>
+    <div class="container border">
+        <div class="demo-only demo-only--sizing slds-grid slds-wrap">
+            <div class="slds-size_2-of-5">
+                <lightning-accordion allow-multiple-sections-open>
+                    <template if:true={knowledgeCategories} for:each={knowledgeCategories} for:item="kG"
+                        for:index="index">
+                        <lightning-accordion-section name={kG.DataCategoryGroupName} label={kG.DataCategoryGroupName}
+                            key={kG.DataCategoryGroupName} class="border-none">
+                            <lightning-accordion allow-multiple-sections-open>
+                                <template if:true={kG.articleDetails} for:each={kG.articleDetails}
+                                    for:item="kG_Category">
+                                    <lightning-accordion-section name={kG_Category.DataCategoryName} label={kG_Category.DataCategoryName}
+                                        key={kG_Category.DataCategoryName} class="border-none">
+                                        <div class="slds-vertical-tabs border-none">
+                                            <ul class="slds-vertical-tabs__nav border-none" role="tablist"
+                                                aria-orientation="vertical" style="background:white;width:100%;">
+                                                <template if:true={kG_Category.articles}
+                                                    for:each={kG_Category.articles} for:item="kA">
+                                                    <li class="slds-vertical-tabs__nav-item border-none" role="presentation"
+                                                        key={kA.articleId} data-knowledgeid={kA.articleId} onclick={handleArticleClick}>
+                                                        <a class="slds-vertical-tabs__link" href="javascript:void(0)"
+                                                            role="tab" tabindex="0" aria-selected="true"
+                                                            aria-controls="slds-vertical-tabs-0">
+                                                            <span>{kA.articleName}</span>
+                                                        </a>
+                                                    </li>
+                                                </template>
+                                            </ul>
+                                        </div>
+                                    </lightning-accordion-section>
+                                </template>
+
+                            </lightning-accordion>
+                        </lightning-accordion-section>
+                    </template>
+                </lightning-accordion>
+            </div>
+            <div class="slds-size_3-of-5">
+                <c-knowledge-content-display knowledge-article-id={selectedKnowledgeArticleId}></c-knowledge-content-display>
+            </div>
+        </div>
+    </div>
+</template>

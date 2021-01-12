@@ -1,0 +1,16 @@
+.container{
+    padding: 10px;
+}
+
+.title{
+    background: #f3f2f2;
+    display:flex;
+    height: 30px;
+    font-size: 16px;
+    justify-content: center;
+    align-items: center;
+}
+
+.body{
+    margin-top: 10px;
+}
