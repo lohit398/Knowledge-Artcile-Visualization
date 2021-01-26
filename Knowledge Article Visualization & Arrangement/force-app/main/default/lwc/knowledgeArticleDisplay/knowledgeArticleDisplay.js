@@ -1,5 +1,6 @@
 import { LightningElement, wire, track, api } from 'lwc';
-import getKnowledgeCategories from '@salesforce/apex/DE_KnowledgeVisualizationHelper.getKnowledgeCategories'
+import getKnowledgeCategories from '@salesforce/apex/DE_KnowledgeVisualizationHelper.getKnowledgeCategories';
+
 
 export default class KnowledgeArticleDisplay extends LightningElement {
     @track knowledgeCategories = [];
@@ -65,6 +66,8 @@ export default class KnowledgeArticleDisplay extends LightningElement {
         }
         this.selectedKnowledgeArticleId = this.recordId;
     }
+
+
 
     // handlers
     handleArticleClick(event) {

@@ -25,10 +25,10 @@
                     <div>
                         Was this article Helpful ?
                     </div>
-                    <div style="margin-right:10px;">
-                        <lightning-button-icon icon-name="utility:like" data-type="up" onclick={handleVote} style="margin-right:10px;">
+                    <div style="margin-right:10px;margin-left:10px;">
+                        <b style="font-size: 16px;color: #050513;">{likes}</b><lightning-button-icon icon-name="utility:like" data-type="up" onclick={handleVote} style="margin-right:10px;">
                         </lightning-button-icon>
-                        <lightning-button-icon onclick={handleVote} data-type="down" icon-name="utility:dislike"></lightning-button-icon>
+                        <b style="font-size: 16px;color: #050513;">{dislikes}</b><lightning-button-icon onclick={handleVote} data-type="down" icon-name="utility:dislike"></lightning-button-icon>
                     </div>
                 </div>
         </div>
