@@ -19,3 +19,8 @@
 .border-none{
     border:none
 }
+
+.active-border{
+    background: #f3f2f2;
+    border-left: 3px solid #534796;
+}

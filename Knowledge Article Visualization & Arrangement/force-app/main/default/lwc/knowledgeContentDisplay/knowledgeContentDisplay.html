@@ -21,6 +21,16 @@
             <div class="body">
                 <lightning-formatted-rich-text value={articleDetail}></lightning-formatted-rich-text>
             </div>
+                <div class="feedback-container">
+                    <div>
+                        Was this article Helpful ?
+                    </div>
+                    <div style="margin-right:10px;">
+                        <lightning-button-icon icon-name="utility:like" data-type="up" onclick={handleVote} style="margin-right:10px;">
+                        </lightning-button-icon>
+                        <lightning-button-icon onclick={handleVote} data-type="down" icon-name="utility:dislike"></lightning-button-icon>
+                    </div>
+                </div>
         </div>
     </template>
     <template if:false={selectedKnowledgeArticleId}>

@@ -18,7 +18,7 @@
                                                 <template if:true={kG_Category.articles}
                                                     for:each={kG_Category.articles} for:item="kA">
                                                     <li class="slds-vertical-tabs__nav-item border-none" role="presentation"
-                                                        key={kA.articleId} data-knowledgeid={kA.articleId} onclick={handleArticleClick}>
+                                                        key={kA.articleId} data-knowledgeid={kA.articleId} data-category={kG_Category.DataCategoryName} onclick={handleArticleClick}>
                                                         <a class="slds-vertical-tabs__link" href="javascript:void(0)"
                                                             role="tab" tabindex="0" aria-selected="true"
                                                             aria-controls="slds-vertical-tabs-0">

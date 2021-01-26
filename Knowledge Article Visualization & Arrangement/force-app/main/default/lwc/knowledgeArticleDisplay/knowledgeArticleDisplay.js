@@ -1,9 +1,10 @@
-import { LightningElement, wire, track,api } from 'lwc';
+import { LightningElement, wire, track, api } from 'lwc';
 import getKnowledgeCategories from '@salesforce/apex/DE_KnowledgeVisualizationHelper.getKnowledgeCategories'
 
 export default class KnowledgeArticleDisplay extends LightningElement {
     @track knowledgeCategories = [];
     selectedKnowledgeArticleId;
+    @api recordId;
 
     /*wire Method to fetch categories and organise appropriately*/
     @wire(getKnowledgeCategories)
@@ -32,10 +33,10 @@ export default class KnowledgeArticleDisplay extends LightningElement {
                                 let obj = {};
                                 obj.DataCategoryName = item.DataCategoryName;
                                 obj.articles = [];
-                                let subObj = {};
+                                /*let subObj = {};
                                 subObj.articleName = item.Parent.Title;
                                 subObj.articleId = item.ParentId;
-                                obj.articles.push(subObj);
+                                obj.articles.push(subObj);*/
                                 this.knowledgeCategories[i].articleDetails.push(obj);
                             }
                         }
@@ -55,17 +56,26 @@ export default class KnowledgeArticleDisplay extends LightningElement {
                     subObj.articleName = item.Parent.Title;
                     subObj.articleId = item.ParentId;
                     articleDetail.articles.push(subObj);
-                    console.log(articleDetail);
+                    
                     new_obj.articleDetails.push(articleDetail);
 
                     this.knowledgeCategories.push(new_obj);
                 }
             })
         }
+        this.selectedKnowledgeArticleId = this.recordId;
     }
 
     // handlers
-    handleArticleClick(event){
+    handleArticleClick(event) {
         this.selectedKnowledgeArticleId = event.currentTarget.dataset.knowledgeid;
+        this.template.querySelector('.active-border') != null || this.template.querySelector('.active-border') != undefined ? this.template.querySelector('.active-border').classList.remove('active-border') : "First Time";
+
+        this.template.querySelectorAll('[data-knowledgeid="' + this.selectedKnowledgeArticleId + '"]').forEach(element => {
+            if (element.dataset.category === event.currentTarget.dataset.category) {
+                element.classList.add('active-border');
+            }
+        });
+        console.log(this.knowledgeCategories);
     }
 }
