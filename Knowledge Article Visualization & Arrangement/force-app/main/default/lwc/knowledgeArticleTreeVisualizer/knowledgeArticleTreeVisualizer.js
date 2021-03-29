@@ -65,12 +65,7 @@ export default class KnowledgeArticleTreeVisualizer extends LightningElement {
                     item.items.pop();
                 }
                 let obj = {};
-                if (article.Parent.Summary != null && article.Parent.Summary != undefined) {
-                    obj.label = article.Parent.Summary;
-                }
-                else {
-                    obj.label = article.Parent.Title;
-                }
+                obj.label = article.Parent.Title;
                 obj.name = article.Parent.Id;
                 obj.items = [];
                 item.items.push(obj);
