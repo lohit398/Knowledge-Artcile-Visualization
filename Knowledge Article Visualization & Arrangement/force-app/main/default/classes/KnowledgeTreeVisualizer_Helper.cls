@@ -45,4 +45,15 @@ public class KnowledgeTreeVisualizer_Helper {
     public static List<knowledge__DataCategorySelection> getKnowledgeArticles(){
         return [SELECT toLabel(DataCategoryName),toLabel(DataCategoryGroupName),ParentId,Parent.Title,Parent.Summary FROM knowledge__DataCategorySelection WHERE ParentId IN (SELECT Id FROM Knowledge__kav WHERE IsLatestVersion = true)];
     }
+     @AuraEnabled(cacheable=true)
+    public static List<knowledge__DataCategorySelection> searchKnowledgeArticles(String searchTerm){
+        String searchString = '%'+searchTerm+'%';
+        return [SELECT toLabel(DataCategoryName),toLabel(DataCategoryGroupName),ParentId,Parent.Title,Parent.Summary FROM knowledge__DataCategorySelection WHERE ParentId IN (SELECT Id FROM Knowledge__kav WHERE IsLatestVersion = true) AND Parent.Title LIKE :searchString];
+    }
+    
+    @AuraEnabled(cacheable=true)
+    public static knowledge__DataCategorySelection getKnowledgeArticle(String articleId){
+            return [SELECT toLabel(DataCategoryName),toLabel(DataCategoryGroupName),ParentId,Parent.Title,Parent.Summary FROM knowledge__DataCategorySelection WHERE ParentId IN (SELECT Id FROM Knowledge__kav WHERE IsLatestVersion = true) AND Parent.Id = :articleId];
+    }
+    
 }

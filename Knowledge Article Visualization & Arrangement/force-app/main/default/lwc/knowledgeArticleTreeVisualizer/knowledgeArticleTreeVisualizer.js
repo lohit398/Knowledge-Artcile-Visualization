@@ -1,11 +1,14 @@
 import { LightningElement, wire, track, api } from 'lwc';
 import getCategoryStructures from '@salesforce/apex/KnowledgeTreeVisualizer_Helper.getCategoryStructures';
 import getKnowledgeArticles from '@salesforce/apex/KnowledgeTreeVisualizer_Helper.getKnowledgeArticles';
+import getKnowledgeArticle from '@salesforce/apex/KnowledgeTreeVisualizer_Helper.getKnowledgeArticle';
 
 export default class KnowledgeArticleTreeVisualizer extends LightningElement {
 
     @track categories = []; // Tree data (Categories) goes into this variable
     @api recordId; //input variable to get clicked knowledge article Id
+    searchedArticleId;
+    __initialSelected;
 
     /*This is the wire method to get data category tree*/
     @wire(getCategoryStructures)
@@ -23,9 +26,9 @@ export default class KnowledgeArticleTreeVisualizer extends LightningElement {
                 });
                 return group;
             })
-            this.categories = JSON.parse(JSON.stringify(this.categories).replaceAll('childCategories', 'items').replaceAll('"items":[]', '"items":[{"label":"No Articles","name":"No Articles","items":[]}]'));
-            console.log(JSON.stringify(this.categories));
+            this.categories = JSON.parse(JSON.stringify(this.categories).replaceAll('childCategories', 'items').replaceAll('"items":[]', '"items":[{"label":"Oops!!","metatext":"No Articles","name":"","items":[]}]'));
             this.getKnowledgeArticles();
+
         }
     }
 
@@ -38,9 +41,30 @@ export default class KnowledgeArticleTreeVisualizer extends LightningElement {
                     let article = item;
                     this.insertArticles(articleDataCategoryName, article, articleDataCategoryGroup);
                 })
-                //console.log(data);
+                if (this.recordId != undefined && this.recordId != null) {
+                    this.getArticlesById(this.recordId,"");
+                }
+
             }).catch(error => {
                 console.log(error);
+            })
+    }
+
+    getArticlesById(articleId, category) {
+        getKnowledgeArticle({ articleId: articleId, articleCategory: category })
+            .then(data => {
+                let categoryTree = this.categories;
+                for (let i = 0; i < categoryTree.length; i++) {
+                    if (categoryTree[i].name === data.DataCategoryGroupName) {
+                        categoryTree[i].expanded = true;
+                        this.findArticle(categoryTree[i].items, data.DataCategoryName);
+                        
+                    }
+                    else{
+                        categoryTree[i].expanded = false;
+                    }
+                }
+                this.categories = JSON.parse(JSON.stringify(categoryTree));
             })
     }
 
@@ -52,17 +76,18 @@ export default class KnowledgeArticleTreeVisualizer extends LightningElement {
                 this.traverseUpdateTree(categoryTree[i].items, article, articleDataCategoryName);
             }
         }
-        //console.log(JSON.stringify(categoryTree));
+
         this.categories = JSON.parse(JSON.stringify(categoryTree));
     }
 
     /*TRAVERSE through nested objects and update the tree*/
     traverseUpdateTree(category, article, articleDataCategoryName) {
         category.map(item => {
+
             if (item.label === articleDataCategoryName) {
-                //console.log(JSON.stringify(item));
                 if (item.items.length === 1) {
-                    item.items.pop();
+                    if (item.items[0].name === "")
+                        item.items.pop();
                 }
                 let obj = {};
                 obj.label = article.Parent.Title;
@@ -77,9 +102,33 @@ export default class KnowledgeArticleTreeVisualizer extends LightningElement {
 
     /*Getting the selecting article and making it available to the customer*/
     handleArticleSelect(event) {
-        if (event.detail.name != "No Articles") {
+        if (event.detail.name != "") {
             const evt = new CustomEvent('articleselected', { detail: event.detail.name });
             this.dispatchEvent(evt);
+        }
+    }
+    /*Article Searched*/
+    handleArticleSearch(event) {
+        this.searchedArticleId = event.detail.articleId;
+        //console.log(event.detail.categoryName);
+        if (this.searchedArticleId != undefined && this.searchedArticleId != null) {
+            this.getArticlesById(this.searchedArticleId,event.detail.categoryName);
+        }
+        const evt = new CustomEvent('articleselected', { detail: event.detail.articleId });
+        this.dispatchEvent(evt);
+    }
+
+    /*Traverse to find the article and expand*/
+    findArticle(categoryTree, dataCategory) {
+        for (let i = 0; i < categoryTree.length; i++) {
+            if (categoryTree[i].name === dataCategory) {
+                categoryTree[i].expanded = true;
+                return;
+            }
+            else if (categoryTree[i].items.length != 0) {
+                categoryTree[i].expanded = false;
+                this.findArticle(categoryTree[i].items, dataCategory)
+            }
         }
     }
 }
