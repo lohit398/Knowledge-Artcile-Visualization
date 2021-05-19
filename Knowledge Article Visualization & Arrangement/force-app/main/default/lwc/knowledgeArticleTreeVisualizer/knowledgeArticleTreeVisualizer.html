@@ -1,7 +1,7 @@
 <template>
-    <div class="slds-m-top_medium slds-m-bottom_x-large">
+    <div class="slds-m-bottom_x-large container">
         <c-knowledge-lookup onsearcharticle={handleArticleSearch}></c-knowledge-lookup>
-        <div class="slds-p-around_medium lgc-bg">
+        <div class="lgc-bg">
             <lightning-tree items={categories} onselect={handleArticleSelect} selected-item={recordId}></lightning-tree>
         </div>
     </div>
