@@ -5,6 +5,7 @@
     <targets>
         <target>lightningCommunity__Default</target>
         <target>lightningCommunity__Page</target>
+        <target>lightning__FlowScreen</target>
     </targets>
 
     <targetConfigs>

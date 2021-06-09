@@ -45,15 +45,28 @@ public class KnowledgeTreeVisualizer_Helper {
     public static List<knowledge__DataCategorySelection> getKnowledgeArticles(){
         return [SELECT toLabel(DataCategoryName),toLabel(DataCategoryGroupName),ParentId,Parent.Title,Parent.Summary FROM knowledge__DataCategorySelection WHERE ParentId IN (SELECT Id FROM Knowledge__kav WHERE IsLatestVersion = true)];
     }
-     @AuraEnabled(cacheable=true)
+    @AuraEnabled(cacheable=true)
     public static List<knowledge__DataCategorySelection> searchKnowledgeArticles(String searchTerm){
         String searchString = '%'+searchTerm+'%';
         return [SELECT toLabel(DataCategoryName),toLabel(DataCategoryGroupName),ParentId,Parent.Title,Parent.Summary FROM knowledge__DataCategorySelection WHERE ParentId IN (SELECT Id FROM Knowledge__kav WHERE IsLatestVersion = true) AND Parent.Title LIKE :searchString];
     }
     
     @AuraEnabled(cacheable=true)
-    public static knowledge__DataCategorySelection getKnowledgeArticle(String articleId){
-            return [SELECT toLabel(DataCategoryName),toLabel(DataCategoryGroupName),ParentId,Parent.Title,Parent.Summary FROM knowledge__DataCategorySelection WHERE ParentId IN (SELECT Id FROM Knowledge__kav WHERE IsLatestVersion = true) AND Parent.Id = :articleId];
+    public static knowledge__DataCategorySelection getKnowledgeArticle(String articleId,String articleCategory){
+        System.debug(articleCategory);
+        List<knowledge__DataCategorySelection> articles = [SELECT toLabel(DataCategoryName),toLabel(DataCategoryGroupName),ParentId,Parent.Title,Parent.Summary FROM knowledge__DataCategorySelection WHERE ParentId IN (SELECT Id FROM Knowledge__kav WHERE IsLatestVersion = true) AND Parent.Id = :articleId];
+        if(articleCategory!=''){
+            knowledge__DataCategorySelection returnArticle;
+            for(knowledge__DataCategorySelection article: articles){
+                if(article.DataCategoryName == articleCategory){
+                    System.debug(article);
+                    returnArticle = article;
+                }
+            }
+            return returnArticle;
+        }
+        else{
+            return articles[0];
+        }
     }
-    
 }
